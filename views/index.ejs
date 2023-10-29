@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%=izenburua%></title>
+</head>
+<body>
+    Kaixo EJS txantiloi kudeatzailetik
+    <ul>
+        <% bezeroak.forEach( function(bezeroa){%>
+        <li><%=bezeroa.izena %> <%=bezeroa.abizena%> <a href = "/bezeroa/delete/<%=bezeroa.id%>">[x]</a></li>
+        <% }) %>
+     </ul>
+     <form action="/bezeroa/new" method="POST" id="formularioa">
+        Nombre: <input type="text" name="izena" id="izena" required>
+        Abizena: <input type="text" name="abizena" id="abizena" required>
+        Email: <input type="email" name="email" id="email" required>
+        <input type="submit" value="Bidali">
+     </form>
+
+</body>
+</html>
