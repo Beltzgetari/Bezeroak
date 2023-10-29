@@ -76,6 +76,6 @@ let bezeroak = [
                 'bezeroak': bezeroak
               });
         } else {
-         res.status(404).send('Cliente no encontrado');
+         res.status(404).send('Ez da aukitu bezerorik');
         }
     })
