@@ -26,9 +26,8 @@ app.get("/", function(req, res) {
 let bezeroak =[];
 
 app.post("/bezeroa/new", function (req, res) {
-    bezeroak.push(req.body); // use req.body instead of req.params
+    bezeroak.push(req.body); 
     console.log(req.body);
-
     console.log(bezeroak);
 
 

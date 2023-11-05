@@ -2,96 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><%=izenburua%></title>
+    <title><%= izenburua %></title>
     <script>
+        function bezeroaEzabatu(id) {
+            let bezeroak = JSON.parse(localStorage.getItem("bezeroak")) || [];
+            let bezeroaIndex = bezeroak.findIndex(bezeroa => bezeroa.id == id);
 
-
-    
-    function bezeroaEzabatu(id){
-                let bezeroak = JSON.parse(localStorage.getItem("bezeroak")) || [] ;
-                let bezeroa = bezeroak.find(bezeroa => bezeroa.id == id);
-                
-                fetch(`/bezeroa/delete/${id}` , {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({id:id})
-                }).then(response => {
-                    if (response.status === 200) {
-                        return response.json();
-                    } else {
-                        throw new Error('Cliente no encontrado');
-                    }
-                }).then(data => {
-                    console.log(data)
-                    localStorage.setItem("bezeroak", JSON.stringify(data));
-
-                    window.location.href=`/bezeroa/delete/${id}`;
-
-                }).catch(error => {
-                    console.error('Error:', error);
-                });
-    }
-
-function updateClientList(bezeroak) {
-    let html = "";
-    bezeroak.forEach(bezeroa => {
-        html += `<li>${bezeroa.izena} ${bezeroa.abizena} <a onclick="bezeroaEzabatu('${bezeroa.id}')">[x]</a></li>`;
-    });
-    document.querySelector("ul").innerHTML = html;
-}
-
-    
-    window.onload = () => {
-
-        //localStorage.clear();
-        let bezeroak = JSON.parse( localStorage.getItem("bezeroak")) || [] ;
-         updateClientList(bezeroak);
-        document.getElementById("formularioa").onsubmit = (e) => {
-            e.preventDefault();
-            
-            let izena = document.getElementById("izena").value;
-            let abizena = document.getElementById("abizena").value;
-            let email = document.getElementById("email").value;
-            document.getElementById("id").value = new Date().getTime();
-        
-        if (izena == "" || abizena == "" || email == "") {
-            alert("Datu guztiak bete behar dira");
-            return false;
+            if (bezeroaIndex !== -1) {
+                bezeroak.splice(bezeroaIndex, 1);
+                localStorage.setItem("bezeroak", JSON.stringify(bezeroak));
+                location.reload(); // Recarga la página para reflejar los cambios
             }
-        
-            let datuakJSON ={
-                "id":  document.getElementById("id").value,
-                "izena": izena,
-                "abizena": abizena,
-                "email": email
-            };
-            bezeroak.push(datuakJSON);
-            localStorage.setItem("bezeroak", JSON.stringify(bezeroak));
-            
-            e.target.submit();
         }
-    }
+
+        window.onload = () => {
+            let bezeroak = JSON.parse(localStorage.getItem("bezeroak")) || [];
+            let ulElement = document.querySelector("ul");
+
+            bezeroak.forEach(bezeroa => {
+                let li = document.createElement("li");
+                li.innerHTML = `${bezeroa.izena} ${bezeroa.abizena} <a onclick="bezeroaEzabatu('${bezeroa.id}')">[x]</a>`;
+                ulElement.appendChild(li);
+            });
+
+            document.getElementById("formularioa").onsubmit = (e) => {
+                e.preventDefault();
+
+                let izena = document.getElementById("izena").value;
+                let abizena = document.getElementById("abizena").value;
+                let email = document.getElementById("email").value;
+                let id = new Date().getTime();
+
+                let datuakJSON = {
+                    "id": id,
+                    "izena": izena,
+                    "abizena": abizena,
+                    "email": email
+                };
+                bezeroak.push(datuakJSON);
+                localStorage.setItem("bezeroak", JSON.stringify(bezeroak));
+
+                location.reload(); // Recarga la página para reflejar los cambios
+            };
+        }
     </script>
 </head>
 <body>
     Kaixo EJS txantiloi kudeatzailetik
     <ul>
-        
-        <% bezeroak.forEach( function(bezeroa){%>
-            <li><%= bezeroa.izena %> <%= bezeroa.abizena %> <a onclick="bezeroaEzabatu('${bezeroa.id}')">[x]</a></li>
-        <% }) %> 
-        
-     </ul>
-     <form action="/bezeroa/new" method="POST" id="formularioa">
+        <!-- La lista se generará dinámicamente desde JavaScript -->
+    </ul>
+    <form action="/bezeroa/new" method="POST" id="formularioa">
         Nombre: <input type="text" name="izena" id="izena" required>
-        Abizena: <input type="text" name="abizena" id="abizena" required>
+        Abizena: <input type="text" name "abizena" id="abizena" required>
         Email: <input type="email" name="email" id="email" required>
-        <input type="hidden" name="id" id="id">
         <input type="submit" value="Bidali">
-     </form>
-
+    </form>
 </body>
-
 </html>
