@@ -42,16 +42,13 @@
                 bezeroak.push(datuakJSON);
                 localStorage.setItem("bezeroak", JSON.stringify(bezeroak));
 
-                location.reload(); // Recarga la página para reflejar los cambios
+                location.reload();
             };
         }
     </script>
 </head>
 <body>
     Kaixo EJS txantiloi kudeatzailetik
-    <ul>
-        <!-- La lista se generará dinámicamente desde JavaScript -->
-    </ul>
     <form action="/bezeroa/new" method="POST" id="formularioa">
         Nombre: <input type="text" name="izena" id="izena" required>
         Abizena: <input type="text" name "abizena" id="abizena" required>
